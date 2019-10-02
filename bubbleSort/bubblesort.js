@@ -23,7 +23,7 @@ function draw(){
 function bubbleSort(){
     let a = values[j];
     let b = values[j+1];
-    if(a < b)
+    if(a > b)
         swap(values, j, j+1);
 
     if(i < values.length){
@@ -35,6 +35,7 @@ function bubbleSort(){
     }else{
         console.log("done");
         noLoop();
+        console.log(values);
     }
 }
 
@@ -42,7 +43,7 @@ function drawRectangles(){
     clear();
     background(153);
     for(let i = 0; i < values.length; i++){
-        rect(i * width/values.length, height, width/values.length, values[i] - height);
+        rect(i * width/values.length, height, width/values.length, -values[i]);
     }
 }
 
