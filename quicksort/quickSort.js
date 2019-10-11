@@ -1,5 +1,5 @@
-let values = [];
-let numbers = 300;
+let array = [];
+let numbers = 100;
 
 let left = 0;
 let right = numbers - 1;
@@ -8,71 +8,64 @@ function setup(){
     createCanvas(windowWidth - 20, windowHeight -20 );
 
     for(let i = 0; i < numbers; i++){
-        values.push(Math.floor(Math.random() * height));
+        array.push(Math.floor(Math.random() * height));
     }
-
+    console.log(array)
+    // frameRate(15);
+    quickSort(array, 0, array.length - 1);
 }
 
 function draw(){
-
     drawRectangles();
-
-    console.log(left,right);
-    quickSort(values);
-}
-
-
-function quickSort(items) {
-    let index;
-    if (items.length > 1) {
-        index = partition(items, left, right); //index returned from partition
-        if (left < index - 1) { //more elements on the left side of the pivot
-            right = index - 1;
-        }
-        if (index < right) { //more elements on the right side of the pivot
-            left = index;
-        }
-    }
-    return items;
 }
 
 
 function drawRectangles(){
     clear();
     background(153);
-    noStroke();
-    for(let i = 0; i < values.length; i++){
-        rect(i * width/values.length, height, width/values.length, -values[i]);
+    for(let i = 0; i < array.length; i++){
+        rect(i * width/array.length, height, width/array.length, -array[i]);
     }
 }
 
-function swap(values, a, b){
-    let temp = values[a];
+async function quickSort(array, start, end){
+    if(start >= end){
+        return
+    }
 
-    values[a] = values[b];
-    values[b] = temp;
+    let index = await partition(array, start, end);
+
+    await Promise.all([quickSort(array, start, index - 1), quickSort(array, index + 1, end)]);
+    
 }
 
-function partition(items, left, right) {
-    var pivot   = items[Math.floor((right + left) / 2)], 
-        i       = left, 
-        j       = right; 
-    while (i <= j) {
-        while (items[i] < pivot) {
-            i++;
-        }
-        while (items[j] > pivot) {
-            j--;
-        }
-        if (i <= j) {
-            swap(items, i, j); 
-            i++;
-            j--;
+async function partition(array, start, end){
+    let pivotIndex = start;
+    let pivotValue = array[end];
+
+    for(let i = start; i < end; i++){
+        if(array[i] < pivotValue){
+            await swap(array, i, pivotIndex);
+            pivotIndex++;
         }
     }
-    return i;
+
+    await swap(array, pivotIndex, end);
+    return pivotIndex;
+}
+
+async function swap(array, a, b){
+    await sleep(10);
+    let temp = array[a];
+
+    array[a] = array[b];
+    array[b] = temp;
 }
 
 function windowResized() {
     resizeCanvas(windowWidth -20, windowHeight -20);
-  }
+}
+
+function sleep(ms){
+    return new Promise(resolve => setTimeout(resolve, ms)); 
+}
