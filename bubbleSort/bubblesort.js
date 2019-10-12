@@ -1,4 +1,4 @@
-let values = [];
+let array = [];
 let numbers = 80;
 
 let i = 0;
@@ -8,52 +8,49 @@ function setup(){
     createCanvas(windowWidth - 20, windowHeight -20 );
 
     for(let i = 0; i < numbers; i++){
-        values.push(Math.floor(Math.random() * height));
+        array.push(Math.floor(Math.random() * height));
     }
+
+    bubbleSort(array);
 }
 
 function draw(){
 
     drawRectangles();
-
-    bubbleSort();
     
 }
 
-function bubbleSort(){
-    let a = values[j];
-    let b = values[j+1];
-    if(a > b)
-        swap(values, j, j+1);
-
-    if(i < values.length){
-        j++;
-        if(j >= values.length - i - 1){
-            j = 0;
-            i++;
+async function bubbleSort(arr){
+    
+    for(let i = 0; i < arr.length; i++){
+        for(let j = 0; j < arr.length - i - 1; j++){
+            if(arr[j] > arr[j+1]){
+                await swap(arr, j, j+1);
+            }
         }
-    }else{
-        console.log("done");
-        noLoop();
-        console.log(values);
     }
 }
 
 function drawRectangles(){
     clear();
     background(153);
-    for(let i = 0; i < values.length; i++){
-        rect(i * width/values.length, height, width/values.length, -values[i]);
+    for(let i = 0; i < array.length; i++){
+        rect(i * width/array.length, height, width/array.length, -array[i]);
     }
 }
 
-function swap(array, a, b){
-    let temp = array[a];
+async function swap(arr, a, b){
+    await sleep(10)
+    let temp = arr[a];
 
-    array[a] = array[b];
-    array[b] = temp;
+    arr[a] = arr[b];
+    arr[b] = temp;
 }
 
 function windowResized() {
     resizeCanvas(windowWidth -20, windowHeight -20);
-  }
+}
+
+function sleep(ms){
+    return new Promise(resolve => setTimeout(resolve, ms)); 
+}
